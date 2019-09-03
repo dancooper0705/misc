@@ -1,9 +1,3 @@
-typedef vector<int> vi;
-typedef pair<int, int> ii;
-typedef vector<ii> vii;
-typedef vector<vi> vvi;
-typedef vector<vii> vvii;
-
 template<typename S, typename T>
 ostream& operator<<(ostream& out, const pair<S, T> p) {
     out << "(" << p.first << "," << p.second << ")";
