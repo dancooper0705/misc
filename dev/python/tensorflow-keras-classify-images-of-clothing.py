@@ -40,12 +40,14 @@ def learn_train_images():
     model.add(keras.layers.Flatten(input_shape=(28, 28)))
     model.add(keras.layers.Dense(128, activation='relu'))
     model.add(keras.layers.Dense(10, activation='softmax'))
+    model.summary()
     model.compile(optimizer='adam',
             loss='sparse_categorical_crossentropy',
             metrics=['accuracy'])
     model.fit(train_images, train_labels, epochs=5)
-    test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-    print('\nTest accuracy:', test_acc)
+    test_scores = model.evaluate(test_images,  test_labels, verbose=2)
+    print('Test loss:', test_scores[0])
+    print('Test accuracy:', test_scores[1])
 
 def predict_all_test_images():
     predictions = model.predict(test_images)
@@ -67,16 +69,19 @@ def predict_all_test_images():
     plt.show()
 
 def predict_single_test_images():
-    img = test_images[1]
+    img = test_images[0]
     print(img.shape)
     # Add the image to a batch where it's the only member.
     img = (np.expand_dims(img,0))
     print(img.shape)
-    predictions_single = model.predict(img)
-    print(predictions_single)
-    plot_value_array(1, predictions_single[0], test_labels)
-    _ = plt.xticks(range(10), class_names, rotation=45)
-    np.argmax(predictions_single[0])
+    predictions = model.predict(img)
+    print(predictions)
+    i = 0
+    plt.figure(figsize=(6,3))
+    plt.subplot(1,2,1)
+    plot_image(i, predictions[0], test_labels, test_images)
+    plt.subplot(1,2,2)
+    plot_value_array(i, predictions[0], test_labels)
     plt.show()
 
 def main():
