@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow.keras as keras
-
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
@@ -84,9 +83,13 @@ def predict_single_test_images():
     plot_value_array(i, predictions[0], test_labels)
     plt.show()
 
+def save_model_as_image():
+    keras.utils.plot_model(model, 'model_with_shape_info.png', show_shapes=True)
+
 def main():
     download_images()
     learn_train_images()
+    save_model_as_image()
     plot_train_images()
     predict_all_test_images()
     predict_single_test_images()
