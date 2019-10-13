@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow.keras as keras
 
-class_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 train_images = None
 train_labels = None
@@ -39,6 +39,7 @@ def download_images():
     test_images_data = test_images.reshape(test_images.shape[0], 32*32*3)
     train_labels = train_labels.reshape(len(train_labels))
     test_labels = test_labels.reshape(len(test_labels))
+    '''
     print('type(tain_lables): ' + str(type(train_labels)))
     print('train_images.shape: ' + str(train_images.shape))
     print('train_labels.shape: ' + str(train_labels.shape))
@@ -48,6 +49,7 @@ def download_images():
     print('train_images: ' + str(train_images))
     print('train_labels: ' + str(train_labels))
     print('test_images: ' + str(test_images))
+    '''
 
 def learn_train_images():
     global model
