@@ -32,20 +32,26 @@ def download_images():
     global train_labels
     global test_images_data
     global train_images_data
-    fashion_mnist = tf.keras.datasets.fashion_mnist
-    (train_images, train_labels), (test_images, test_labels) = keras.datasets.mnist.load_data()
+    (train_images, train_labels), (test_images, test_labels) = keras.datasets.cifar10.load_data()
     train_images = train_images / 255.0
     test_images = test_images / 255.0
-    train_images_data = train_images.reshape(train_images.shape[0], 784)
-    test_images_data = test_images.reshape(test_images.shape[0], 784)
+    train_images_data = train_images.reshape(train_images.shape[0], 32*32*3)
+    test_images_data = test_images.reshape(test_images.shape[0], 32*32*3)
+    train_labels = train_labels.reshape(len(train_labels))
+    test_labels = test_labels.reshape(len(test_labels))
+    print('type(tain_lables): ' + str(type(train_labels)))
     print('train_images.shape: ' + str(train_images.shape))
+    print('train_labels.shape: ' + str(train_labels.shape))
     print('test_images.shape: ' + str(test_images.shape))
     print('train_images_data.shape: ' + str(train_images_data.shape))
     print('test_images_data.shape: ' + str(test_images_data.shape))
+    print('train_images: ' + str(train_images))
+    print('train_labels: ' + str(train_labels))
+    print('test_images: ' + str(test_images))
 
 def learn_train_images():
     global model
-    inputs = keras.Input(shape=(784,), name='img')
+    inputs = keras.Input(shape=(32*32*3,), name='img')
     x = keras.layers.Dense(64, activation='relu')(inputs)
     x = keras.layers.Dense(64, activation='relu')(x)
     outputs = keras.layers.Dense(10, activation='softmax')(x)
