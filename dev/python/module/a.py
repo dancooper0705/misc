@@ -2,8 +2,11 @@ import sys
 import dcstat
 
 def main():
-    arr = [1, 3, 4, 5]
-    print(dcstat.mean(arr))
+    sample = dcstat.sample()
+    for i in range(10):
+        sample.add_element(i)
+    print(sample.mean())
+    print(sample.variance())
 
 if __name__ == "__main__":
     main()
