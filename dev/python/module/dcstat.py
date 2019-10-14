@@ -38,7 +38,7 @@ class sample:
     def critical_value_of_z(self, tail_area):
         return scipy.stats.norm.ppf(1 - tail_area)
 
-    def confidence_interval_of_mean(self, confidence_level, sample_size=None, sample_mean=None, sample_standard_deviation=None):
+    def confidence_interval_of_population_mean(self, confidence_level, sample_size=None, sample_mean=None, sample_standard_deviation=None):
         if sample_size == None:
             sample_size = self.size()
             sample_mean = self.mean()
