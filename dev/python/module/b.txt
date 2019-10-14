@@ -1,4 +1,4 @@
-  File "a.py", line 1
-    iport sys
-            ^
-SyntaxError: invalid syntax
+14.5
+77.5
+8.803408430829505
+[11.856032416361098, 17.1439675836389]
