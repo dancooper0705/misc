@@ -1,6 +1,8 @@
 import math
+import scipy.stats
 
 class sample:
+    population_variance = None
     arr = []
 
     def __init__(self):
@@ -9,15 +11,15 @@ class sample:
     def add_element(self, val):
         self.arr.append(val)
 
+    def size(self):
+        return len(self.arr)
+
     def mean(self):
         total = 0
         for a in self.arr:
             total += a
         avg = total / len(self.arr)
         return avg
-
-    def count(self):
-        return len(self.arr)
 
     def variance(self):
         ans = 0
@@ -30,26 +32,22 @@ class sample:
         ans = (x2 - x **2 / n) / (n - 1)
         return ans
 
-    def deviation(self):
+    def standard_deviation(self):
         return math.sqrt(self.variance())
 
-    def mean_confidence_interval(self, confidence_level):
-        mean = self.mean)
-        deviation = self.deviation() / math.sqrt(self.count())
-        z_critial_value = 0
-        if confidence_level == 80:
-            alpha = 0.1
-            z_critical_value = 1.28
-        elif confidence_level == 90:
-            alpha = 0.05
-            z_critical_value = 1.645
-        elif confidence_level == 95:
-            alpha = 0.025
-            z_critical_value = 1.96
-        elif confidence_level == 98:
-            alpha = 0.001
-            z_critical_value = 2.33
-        elif confidence_level == 99:
-            alpha = 0.0005
-            z_critical_value = 2.58
-        return [mean - z_critical_value * deviation, mean + z_critical_value * deviation]
+    def critical_value_of_z(self, tail_area):
+        return scipy.stats.norm.ppf(1 - tail_area)
+
+    def confidence_interval_of_mean(self, confidence_level, sample_size=None, sample_mean=None, sample_standard_deviation=None):
+        if sample_size == None:
+            sample_size = self.size()
+            sample_mean = self.mean()
+            sample_standard_deviation = self.standard_deviation()
+        mean = sample_mean
+        standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
+        confidence_coefficient = confidence_level / 100
+        alpha_level = 1 - confidence_coefficient
+        tail_area = alpha_level / 2
+        z_score = self.critical_value_of_z(tail_area)
+        return [mean - z_score * standard_deviation, mean + z_score * standard_deviation]
+
