@@ -10,6 +10,13 @@ def confidence_interval_of_population_proportion(sample_size, sample_proportion,
     z_score = scipy.stats.norm.ppf(1 - tail_area)
     return [mean - z_score * standard_deviation, mean + z_score * standard_deviation]
 
+def sample_size_for_confidence_level_of_population_proportion(sample_proportion, margin_of_error, confidence_level):
+    confidence_coefficient = confidence_level / 100
+    alpha_level = 1 - confidence_coefficient
+    tail_area = alpha_level / 2
+    z_score = scipy.stats.norm.ppf(1 - tail_area)
+    return math.ceil(z_score**2 * sample_proportion * (1 - sample_proportion) / (margin_of_error ** 2))
+
 def confidence_interval_of_population_mean_with_normal_distribution(sample_size, sample_mean, sample_standard_deviation, confidence_level):
     mean = sample_mean
     standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
@@ -100,6 +107,7 @@ def main():
     print('90% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 90)))
     print('95% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 95)))
     print('99% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 99)))
+    print()
 
     print('example3, p = sample proportion, n*p >= 5 && n*(1-p)>=5')
     sample_size = 800
@@ -108,6 +116,16 @@ def main():
     print('sample_proportion: ' + str(sample_proportion))
     print('90% confidence interval for population proportion: ' + ' to '.join('{0:.4f}'.format(a) for a in confidence_interval_of_population_proportion(sample_size, sample_proportion, 90)))
     print('95% confidence interval for population proportion: ' + ' to '.join('{0:.4f}'.format(a) for a in confidence_interval_of_population_proportion(sample_size, sample_proportion, 95)))
+    print()
+
+    print('example4')
+    sample_proportion = 0.03
+    margin_of_error = 0.01
+    confidence_level = 95
+    print('sample_proportion: ' + str(sample_proportion))
+    print('margin_of_error: ' + str(margin_of_error))
+    print('sample size for confidence level 95%: ' + str(sample_size_for_confidence_level_of_population_proportion(sample_proportion, margin_of_error, confidence_level)))
+    print()
 
 if __name__ == "__main__":
     main()
