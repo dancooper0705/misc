@@ -1,14 +1,19 @@
 import math
 import scipy.stats
 
-def confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, confidence_level):
+def confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, confidence_level, is_population_standard_deviationi_known=False):
     mean = sample_mean
     standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
     confidence_coefficient = confidence_level / 100
     alpha_level = 1 - confidence_coefficient
     tail_area = alpha_level / 2
-    z_score = scipy.stats.norm.ppf(1 - tail_area)
-    return [mean - z_score * standard_deviation, mean + z_score * standard_deviation]
+    if is_population_standard_deviationi_known == True or sample_size >= 30:
+        z_score = scipy.stats.norm.ppf(1 - tail_area)
+        return [mean - z_score * standard_deviation, mean + z_score * standard_deviation]
+    else:
+        degree_freedom = sample_size - 1
+        t_score = scipy.stats.t.ppf(1 - tail_area, degree_freedom)
+        return [mean - t_score * standard_deviation, mean + t_score * standard_deviation]
 
 class Sample:
     arr = []
@@ -51,15 +56,31 @@ class Sample:
 
 def main():
     sample = Sample()
-    for i in range(30):
-        sample.add_element(i)
+    ratings = [6, 4, 6, 8, 7, 7, 6, 3, 3, 8, 10, 4, 8, 7, 8, 7, 5, 9, 5, 8, 4, 3, 8, 5, 5, 4, 4, 4, 8, 4, 5, 6, 2, 5, 9, 9, 8, 4, 8, 9, 9, 5, 9, 7, 8, 3, 10, 8, 9, 6]
+    sample = Sample()
+    for a in ratings:
+        sample.add_element(a)
+    print('example1, sample size >= 30, use t-score to estimate confidence interval')
     print('sample.size(): ' + str(sample.size()))
     print('sample.mean(): ' + str(sample.mean()))
     print('sample.variance(): ' + str(sample.variance()))
     print('sample.standard_deviation(): ' + str(sample.standard_deviation()))
-    print('90% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(90)))
-    print('95% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(95)))
-    print('99% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(99)))
+    print('90% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(90)))
+    print('95% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(95)))
+    print('99% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(99)))
+    print()
+
+    print('example2, sample size < 30, use t-score to estimate confidence interval')
+    sample_size = 20
+    sample_mean = 17.25
+    sample_standard_deviation = 3.3
+    print('sample.size: ' + str(sample_size))
+    print('sample.mean: ' + str(sample_mean))
+    print('sample.standard_deviation: ' + str(sample_standard_deviation))
+    print('90% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 90)))
+    print('95% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 95)))
+    print('99% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 99)))
+
 
 if __name__ == "__main__":
     main()
