@@ -1,8 +1,7 @@
 import math
 import scipy.stats
 
-class sample:
-    population_variance = None
+class Sample:
     arr = []
 
     def __init__(self):
@@ -35,19 +34,29 @@ class sample:
     def standard_deviation(self):
         return math.sqrt(self.variance())
 
-    def critical_value_of_z(self, tail_area):
-        return scipy.stats.norm.ppf(1 - tail_area)
-
-    def confidence_interval_of_population_mean(self, confidence_level, sample_size=None, sample_mean=None, sample_standard_deviation=None):
-        if sample_size == None:
-            sample_size = self.size()
-            sample_mean = self.mean()
-            sample_standard_deviation = self.standard_deviation()
+    def confidence_interval_of_population_mean(self, confidence_level):
+        sample_size = self.size()
+        sample_mean = self.mean()
+        sample_standard_deviation = self.standard_deviation()
         mean = sample_mean
         standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
         confidence_coefficient = confidence_level / 100
         alpha_level = 1 - confidence_coefficient
         tail_area = alpha_level / 2
-        z_score = self.critical_value_of_z(tail_area)
+        z_score = scipy.stats.norm.ppf(1 - tail_area)
         return [mean - z_score * standard_deviation, mean + z_score * standard_deviation]
 
+def main():
+    sample = Sample()
+    for i in range(30):
+        sample.add_element(i)
+    print('sample.size(): ' + str(sample.size()))
+    print('sample.mean(): ' + str(sample.mean()))
+    print('sample.variance(): ' + str(sample.variance()))
+    print('sample.standard_deviation(): ' + str(sample.standard_deviation()))
+    print('90% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(90)))
+    print('95% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(95)))
+    print('99% confidence interval for population mean: ' + str(sample.confidence_interval_of_population_mean(99)))
+
+if __name__ == "__main__":
+    main()
