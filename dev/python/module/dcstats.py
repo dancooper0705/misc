@@ -42,62 +42,58 @@ def confidence_interval_of_population_mean(sample_size, sample_mean, sample_stan
     else:
         return confidence_interval_of_population_mean_with_students_t_distribution(sample_size, sample_mean, sample_standard_deviation, confidence_level)
 
-class Sample:
-    arr = []
+def upper_tailed_critical_z_score(significance):
+    tail_area = significance
+    critical_z_score = scipy.stats.norm.ppf(1 - tail_area)
+    return critical_z_score
 
-    def __init__(self):
-        pass
+def lower_tailed_critical_z_score(significance):
+    tail_area = significance
+    critical_z_score = scipy.stats.norm.ppf(tail_area)
+    return critical_z_score
 
-    def add_element(self, val):
-        self.arr.append(val)
+def two_tailed_critical_z_score(significance):
+    tail_area = significance / 2
+    critical_z_score = scipy.stats.norm.ppf(1 - tail_area)
+    return critical_z_score
 
-    def size(self):
-        return len(self.arr)
+def test_statistics(hypothesis_mean, sample_size, sample_mean, sample_standard_deviation):
+    standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
+    z_score = (sample_mean - hypothesis_mean) / standard_deviation
+    return z_score
 
-    def mean(self):
-        total = 0
-        for a in self.arr:
-            total += a
-        avg = total / len(self.arr)
-        return avg
+def upper_tailed_p_value_with_z_score(z_score):
+    p_value = scipy.stats.norm.cdf(-z_score)
+    return p_value
 
-    def variance(self):
-        ans = 0
-        x = 0
-        x2 = 0
-        n = len(self.arr)
-        for a in self.arr:
-            x = x + a
-            x2 = x2 + a ** 2
-        ans = (x2 - x **2 / n) / (n - 1)
-        return ans
+def lower_tailed_p_value_with_z_score(z_score):
+    p_value = scipy.stats.norm.cdf(z_score)
+    return p_value
 
-    def standard_deviation(self):
-        return math.sqrt(self.variance())
+def two_tailed_p_value_with_z_score(z_score):
+    p_value = 2.0 * scipy.stats.norm.cdf(-abs(z_score))
+    return p_value
 
-    def confidence_interval_of_population_mean(self, confidence_level):
-        sample_size = self.size()
-        sample_mean = self.mean()
-        sample_standard_deviation = self.standard_deviation()
-        return confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, confidence_level)
+def upper_tailed_critical_t_score(significance, df):
+    return scipy.stats.t.ppf(1 - significance, df)
+
+def lower_tailed_critical_t_score(significance, df):
+    return scipy.stats.t.ppf(significance, df)
+
+def two_tailed_critical_t_score(significance, df):
+    return scipy.stats.t.ppf(1 - significance / 2, df)
+
+def upper_tailed_p_value_with_t_score(t_score, df):
+    return scipy.stats.t.cdf(-t_score, df)
+
+def lower_tailed_p_value_with_t_score(t_score, df):
+    return scipy.stats.norm.cdf(t_score)
+
+def two_tailed_p_value_with_t_score(t_score, df):
+    return 2.0 * scipy.stats.norm.cdf(-abs(t_score))
 
 def main():
-    sample = Sample()
-    ratings = [6, 4, 6, 8, 7, 7, 6, 3, 3, 8, 10, 4, 8, 7, 8, 7, 5, 9, 5, 8, 4, 3, 8, 5, 5, 4, 4, 4, 8, 4, 5, 6, 2, 5, 9, 9, 8, 4, 8, 9, 9, 5, 9, 7, 8, 3, 10, 8, 9, 6]
-    sample = Sample()
-    for a in ratings:
-        sample.add_element(a)
-    print('example1, sample size >= 30, use t-score to estimate confidence interval')
-    print('sample.size(): ' + str(sample.size()))
-    print('sample.mean(): ' + str(sample.mean()))
-    print('sample.variance(): ' + str(sample.variance()))
-    print('sample.standard_deviation(): ' + str(sample.standard_deviation()))
-    print('90% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(90)))
-    print('95% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(95)))
-    print('99% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in sample.confidence_interval_of_population_mean(99)))
-    print()
-
-    print('example2, sample size < 30, use t-score to estimate confidence interval')
+    print('example1, sample size < 30, use t-score to estimate confidence interval')
     sample_size = 20
     sample_mean = 17.25
     sample_standard_deviation = 3.3
@@ -109,7 +105,7 @@ def main():
     print('99% confidence interval for population mean: ' + ' to '.join('{0:.2f}'.format(a) for a in confidence_interval_of_population_mean(sample_size, sample_mean, sample_standard_deviation, 99)))
     print()
 
-    print('example3, p = sample proportion, n*p >= 5 && n*(1-p)>=5')
+    print('example2, p = sample proportion, n*p >= 5 && n*(1-p)>=5')
     sample_size = 800
     sample_proportion = 0.7
     print('sample_size: ' + str(sample_size))
@@ -118,7 +114,7 @@ def main():
     print('95% confidence interval for population proportion: ' + ' to '.join('{0:.4f}'.format(a) for a in confidence_interval_of_population_proportion(sample_size, sample_proportion, 95)))
     print()
 
-    print('example4')
+    print('example3')
     sample_proportion = 0.03
     margin_of_error = 0.01
     confidence_level = 95
