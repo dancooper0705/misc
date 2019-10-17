@@ -57,9 +57,9 @@ def two_tailed_critical_z_score(significance):
     critical_z_score = scipy.stats.norm.ppf(1 - tail_area)
     return critical_z_score
 
-def test_statistics_score(hypothesis_mean, sample_size, sample_mean, sample_standard_deviation):
+def test_statistics_score(population_mean, sample_size, sample_mean, sample_standard_deviation):
     standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
-    z_score = (sample_mean - hypothesis_mean) / standard_deviation
+    z_score = (sample_mean - population_mean) / standard_deviation
     return z_score
 
 def upper_tailed_p_value_with_z_score(z_score):
