@@ -62,8 +62,9 @@ def sample_mean_test_statistics_score(population_mean, sample_size, sample_mean,
     z_score = (sample_mean - population_mean) / standard_deviation
     return z_score
 
-def sample_proportion_test_statistics_score(population_proportion, sample_proportion, population_standard_deviation):
-    z_score = (sample_proportion - population_proportion) / population_standard_deviation
+def sample_proportion_test_statistics_score(population_proportion, sample_size, sample_proportion):
+    standard_deviation = math.sqrt(population_proportion * (1 - population_proportion) / sample_size)
+    z_score = (sample_proportion - population_proportion) / standard_deviation
     return z_score
 
 def upper_tailed_p_value_with_z_score(z_score):
