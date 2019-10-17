@@ -57,9 +57,13 @@ def two_tailed_critical_z_score(significance):
     critical_z_score = scipy.stats.norm.ppf(1 - tail_area)
     return critical_z_score
 
-def test_statistics_score(population_mean, sample_size, sample_mean, sample_standard_deviation):
+def sample_mean_test_statistics_score(population_mean, sample_size, sample_mean, sample_standard_deviation):
     standard_deviation = sample_standard_deviation / math.sqrt(sample_size)
     z_score = (sample_mean - population_mean) / standard_deviation
+    return z_score
+
+def sample_proportion_test_statistics_score(population_proportion, sample_proportion, population_standard_deviation):
+    z_score = (sample_proportion - population_proportion) / population_standard_deviation
     return z_score
 
 def upper_tailed_p_value_with_z_score(z_score):
@@ -75,22 +79,28 @@ def two_tailed_p_value_with_z_score(z_score):
     return p_value
 
 def upper_tailed_critical_t_score(significance, df):
-    return scipy.stats.t.ppf(1 - significance, df)
+    t_score = scipy.stats.t.ppf(1 - significance, df)
+    return t_score
 
 def lower_tailed_critical_t_score(significance, df):
-    return scipy.stats.t.ppf(significance, df)
+    t_score = scipy.stats.t.ppf(significance, df)
+    return t_score
 
 def two_tailed_critical_t_score(significance, df):
-    return scipy.stats.t.ppf(1 - significance / 2, df)
+    t_score = scipy.stats.t.ppf(1 - significance / 2, df)
+    return t_score
 
 def upper_tailed_p_value_with_t_score(t_score, df):
-    return scipy.stats.t.cdf(-t_score, df)
+    t_score = scipy.stats.t.cdf(-t_score, df)
+    return t_score
 
 def lower_tailed_p_value_with_t_score(t_score, df):
-    return scipy.stats.norm.cdf(t_score)
+    t_score = scipy.stats.t.cdf(t_score, df)
+    return t_score
 
 def two_tailed_p_value_with_t_score(t_score, df):
-    return 2.0 * scipy.stats.norm.cdf(-abs(t_score))
+    t_score = 2.0 * scipy.stats.t.cdf(-abs(t_score), df)
+    return t_score
 
 def main():
     print('example1, sample size < 30, use t-score to estimate confidence interval')
